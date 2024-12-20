@@ -52,6 +52,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_COOKIE_SECURE=True
+SESSION_COOKIE_SECURE=True
+SECURE_BROWSER_XSS_FILTER=True
+# X_FRAME_OPTIONS="Deny"
+# SECURE_CONTENT_TYPE_NOSNIFF=True
+# SECURE_SSL_REDIRECT=True
+# SECURE_HSTS_SECONDS=31536000 
+# SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+# SECURE_HSTS_PRELOAD=True
+# SECURE_PROXY_SSL_HEADER=True
+# HTTP_X_FORWARDED_PROTO=True
+
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
@@ -104,14 +116,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ],
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .models import *
-from rest_framework import generics
+from .models import item,inventory
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .serializers import *
@@ -14,35 +13,26 @@ class view_inventorys(APIView):
     def get(self,request):
         inventorys=inventory.objects.all()
         serializer=inventoryserialization(inventorys,many=True)
-        if serializer.is_valid:
             
-            return Response(serializer.data,status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors,status=status.HTTP_403_FORBIDDEN)
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
 
 
 class view_items(APIView):
     # permission_classes=[IsAuthenticated]
     # authentication_classes=[TokenAuthentication]
-    def get(self):
+    def get(self,request):
         items=item.objects.all()
         serializer=itemserialization(items,many=True)
-        if serializer.is_valid:
-            return Response(serializer.data,status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors,status=status.HTTP_403_FORBIDDEN)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+        
         
         
         
 class view_speciefic_item(APIView):
-    permission_classes=[IsAuthenticated]
-    authentication_classes=[TokenAuthentication]
-    def get(self):
+    # permission_classes=[IsAuthenticated]
+    # authentication_classes=[TokenAuthentication]
+    def get(self,request,id):
         speciefic_item=get_object_or_404(item,pk=id)
         serializer=itemserialization(speciefic_item)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors,status=status.HTTP_403_FORBIDDEN)
+        return Response(serializer.data,status=status.HTTP_200_OK)

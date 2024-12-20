@@ -6,6 +6,7 @@ class item(models.Model):
     price=models.DecimalField(max_digits=4,decimal_places=3,null=False,blank=False)
     
     
+    
     def __str__(self):
         return self.name
         
@@ -13,7 +14,7 @@ class inventory(models.Model):
     name=models.CharField(max_length=100,null=False,blank=False)
     location=models.CharField(max_length=100,null=False,blank=False)
     quantity=models.IntegerField()
-    items=models.ForeignKey(item,on_delete=models.CASCADE)
+    items=models.ForeignKey(item,on_delete=models.CASCADE,default=None)
     
     def __str__(self):
         return self.name

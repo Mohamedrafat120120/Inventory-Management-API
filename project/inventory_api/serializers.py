@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import *
 class itemserialization(serializers.ModelSerializer):
+    
     class Meta:
         model = item
-        fields ='__all__'
+        fields =['name','description','price']
 class inventoryserialization(serializers.ModelSerializer):
     item=itemserialization(many=True,read_only=True)
     class Meta:
