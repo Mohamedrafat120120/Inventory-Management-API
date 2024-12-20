@@ -9,13 +9,13 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 class view_inventorys(APIView):
-    permission_classes=[IsAuthenticated]
-    authentication_classes=[TokenAuthentication]
+    # permission_classes=[IsAuthenticated]
+    # authentication_classes=[TokenAuthentication]
     def get(self,request):
         inventorys=inventory.objects.all()
         serializer=inventoryserialization(inventorys,many=True)
-        if serializer.is_valid():
-            serializer.save()
+        if serializer.is_valid:
+            
             return Response(serializer.data,status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,status=status.HTTP_403_FORBIDDEN)
@@ -23,13 +23,12 @@ class view_inventorys(APIView):
 
 
 class view_items(APIView):
-    permission_classes=[IsAuthenticated]
-    authentication_classes=[TokenAuthentication]
+    # permission_classes=[IsAuthenticated]
+    # authentication_classes=[TokenAuthentication]
     def get(self):
-        inventorys=item.objects.all()
-        serializer=itemserialization(item,many=True)
-        if serializer.is_valid():
-            serializer.save()
+        items=item.objects.all()
+        serializer=itemserialization(items,many=True)
+        if serializer.is_valid:
             return Response(serializer.data,status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,status=status.HTTP_403_FORBIDDEN)
