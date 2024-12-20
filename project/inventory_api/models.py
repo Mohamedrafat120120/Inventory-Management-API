@@ -14,7 +14,7 @@ class inventory(models.Model):
     name=models.CharField(max_length=100,null=False,blank=False)
     location=models.CharField(max_length=100,null=False,blank=False)
     quantity=models.IntegerField()
-    items=models.ForeignKey(item,on_delete=models.CASCADE,default=None)
+    items=models.ForeignKey(item,on_delete=models.CASCADE,null=False,blank=False,default=None)
     
     def __str__(self):
         return self.name

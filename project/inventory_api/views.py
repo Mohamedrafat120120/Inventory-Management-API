@@ -38,9 +38,9 @@ class view_speciefic_item(APIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 
-class add_items(APIView):
-    # permission_classes=[IsAuthenticated]
-    # authentication_classes=[TokenAuthentication]
+class add_item(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
     def post(self,request):
         serializer=itemserialization(data=request.data)
         if serializer.is_valid():
@@ -49,18 +49,21 @@ class add_items(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
     
-class add_inventorys(APIView):
-    # permission_classes=[IsAuthenticated]
-    # authentication_classes=[TokenAuthentication]
+class add_inventory(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
     def post(self,request):
-        
-        serializer=inventoryserialization(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        if not inventory.objects.filter(name=request.data['name']).exists():
+           serializer=inventoryserialization(data=request.data)
+           if serializer.is_valid(raise_exception=True):
+              serializer.save()
+              return Response(serializer.data,status=status.HTTP_201_CREATED)
+           return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error":"inventory name already exists"},status=status.HTTP_400_BAD_REQUEST)
     
 class delete_items(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
     def get(self,request):
        items=item.objects.all()
        if items:
@@ -70,6 +73,8 @@ class delete_items(APIView):
    
    
 class delete_inventorys(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
     def get(self,request):
        inventorys=inventory.objects.all()
        if inventorys:
@@ -78,22 +83,46 @@ class delete_inventorys(APIView):
        return Response({"message":"no inventorys to delete"},status=status.HTTP_400_BAD_REQUEST)
    
 class delete_speciefic_item(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
     def get(self,request,id):
-       item=get_object_or_404(item,pk=id)
-       if item:
-           item.delete()
+       Item=get_object_or_404(item,PK=id)
+       if Item:
+           Item.delete()
            return Response({"message":"item deleted"},status=status.HTTP_200_OK)
        return Response({"message":"no items to delete"},status=status.HTTP_400_BAD_REQUEST)
    
 class delete_speciefic_invetory(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
     def get(self,request,id):
-       inventory=get_object_or_404(inventory,pk=id)
-       if inventory:
-           inventory.delete()
+       Inventory=get_object_or_404(inventory,pk=id)
+       if Inventory:
+           Inventory.delete()
            return Response({"message":"inventory deleted"},status=status.HTTP_200_OK)
        return Response({"message":"no inventorys to delete"},status=status.HTTP_400_BAD_REQUEST)
    
    
-   
+class update_item(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    def post(self,request,id):
+        Item=get_object_or_404(item,pk=id)
+        Item.name=request.data['name']
+        Item.description=request.data['description']
+        Item.price=request.data['price']
+        Item.save()
+        return Response({"message":"item updated"},status=status.HTTP_200_OK)
+        
+class update_inventory(APIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    def post(self,request,id):
+        Inventory=get_object_or_404(inventory,pk=id)
+        Inventory.name=request.data['name']
+        Inventory.location=request.data['location']
+        Inventory.quantity=request.data['quantity']
+        Inventory.save()
+        return Response({"message":"item updated"},status=status.HTTP_200_OK)   
        
            

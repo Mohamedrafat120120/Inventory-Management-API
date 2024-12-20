@@ -4,7 +4,7 @@ class itemserialization(serializers.ModelSerializer):
     
     class Meta:
         model = item
-        fields =['name','description','price']
+        fields =['id','name','description','price']
 class inventoryserialization(serializers.ModelSerializer):
     item=itemserialization(many=True,read_only=True)
     class Meta:
