@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,8 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inventory_api',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework_simplejwt',
+    'accounts.apps.AccountsConfig'
 ]
+AUTH_USER_MODEL = 'accounts.MyUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,14 +58,7 @@ MIDDLEWARE = [
 CSRF_COOKIE_SECURE=True
 SESSION_COOKIE_SECURE=True
 SECURE_BROWSER_XSS_FILTER=True
-# X_FRAME_OPTIONS="Deny"
-# SECURE_CONTENT_TYPE_NOSNIFF=True
-# SECURE_SSL_REDIRECT=True
-# SECURE_HSTS_SECONDS=31536000 
-# SECURE_HSTS_INCLUDE_SUBDOMAINS=True
-# SECURE_HSTS_PRELOAD=True
-# SECURE_PROXY_SSL_HEADER=True
-# HTTP_X_FORWARDED_PROTO=True
+
 
 ROOT_URLCONF = 'project.urls'
 
@@ -82,6 +78,23 @@ TEMPLATES = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME_LATE_USER': timedelta(days=30),
+}
+
 WSGI_APPLICATION = 'project.wsgi.application'
 
 
@@ -94,7 +107,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 
 
@@ -116,14 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -146,3 +151,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

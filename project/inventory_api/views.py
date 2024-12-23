@@ -6,7 +6,7 @@ from .serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-
+from rest_framework import generics
 class view_inventorys(APIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
@@ -110,6 +110,8 @@ class update_item(APIView):
         Item=get_object_or_404(item,pk=id)
         Item.name=request.data['name']
         Item.description=request.data['description']
+        Item.quantity=request.data['quantity']
+        Item.category=request.data['category']
         Item.price=request.data['price']
         Item.save()
         return Response({"message":"item updated"},status=status.HTTP_200_OK)
@@ -121,8 +123,17 @@ class update_inventory(APIView):
         Inventory=get_object_or_404(inventory,pk=id)
         Inventory.name=request.data['name']
         Inventory.location=request.data['location']
-        Inventory.quantity=request.data['quantity']
+        Inventory.items_quantity=request.data['items_quantity']
+        Inventory.category=request.data['category']
         Inventory.save()
         return Response({"message":"item updated"},status=status.HTTP_200_OK)   
        
            
+           
+class filter_items(generics.ListAPIView):
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
+    serializer_class=itemserialization
+    def get_queryset(self):
+        queryset=item.objects.filter(category=category)
+    

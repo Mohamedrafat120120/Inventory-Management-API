@@ -12,5 +12,6 @@ urlpatterns = [
     path('delete_speciefic_invetory/<int:id>/',delete_speciefic_invetory.as_view(),name="delete_speciefic_invetory"),
     path('update_item/<int:id>/',update_item.as_view(),name="update_item"),
     path('update_inventory/<int:id>/',update_inventory.as_view(),name="update_inventory"),
+    path('filter_items/<str:category>/',filter_items.as_view(),name='filter_items')
 
 ]
