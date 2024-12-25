@@ -32,3 +32,16 @@ class login(APIView):
                 return Response({"msg":"user not found"},status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(serialize.errors)
+        
+        
+        
+        
+        
+class profile(APIView):
+    def get(self,request):
+        user=request.user
+        if user is not None:
+         user_serialize=profile_serializer(user)
+         return Response({"user":user_serialize.data},status=status.HTTP_200_OK)
+        else:
+            return Response({"error":"user not found"},status=status.HTTP_404_NOT_FOUND)

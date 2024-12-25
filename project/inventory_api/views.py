@@ -5,8 +5,7 @@ from rest_framework.authentication import TokenAuthentication
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework import generics
+from rest_framework import status,generics,filters
 class view_inventorys(APIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
@@ -131,9 +130,23 @@ class update_inventory(APIView):
            
            
 class filter_items(generics.ListAPIView):
-    permission_classes=[IsAuthenticated]
-    authentication_classes=[TokenAuthentication]
+    # permission_classes=[IsAuthenticated]
+    # authentication_classes=[TokenAuthentication]
     serializer_class=itemserialization
     def get_queryset(self):
-        queryset=item.objects.filter(category=category)
+        category=self.kwargs.get('category')
+        return item.objects.filter(category=category)
+        
+        
+        
+class sort_items(generics.ListAPIView):
+    # permission_classes=[IsAuthenticated]
+    # authentication_classes=[TokenAuthentication]
+    queryset=item.objects.all()
+    serializer_class=itemserialization
+    filter_backends=[filters.OrderingFilter]
+    ordering_fields=['name','price']
+    
+    
+
     
