@@ -33,7 +33,7 @@ class inventory(models.Model):
     items_quantity=models.IntegerField()
     category=models.CharField(max_length=100,choices=category.choices,null=False,blank=False,default=None)
     date_add=models.DateField(auto_now_add=True)
-    items=models.ForeignKey(item,on_delete=models.CASCADE,null=False,blank=False)
+    items=models.ForeignKey(item,on_delete=models.PROTECT,null=False,blank=False)
 
     
     def __str__(self):
