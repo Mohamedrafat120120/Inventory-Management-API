@@ -63,7 +63,7 @@ class add_inventory(APIView):
 class delete_items(APIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
-    def get(self,request):
+    def delete(self,request):
        items=item.objects.all()
        if items:
            items.delete()
@@ -74,7 +74,7 @@ class delete_items(APIView):
 class delete_inventorys(APIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
-    def get(self,request):
+    def delete(self,request):
        inventorys=inventory.objects.all()
        if inventorys:
            inventorys.delete()
@@ -84,7 +84,7 @@ class delete_inventorys(APIView):
 class delete_speciefic_item(APIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
-    def get(self,request,id):
+    def delete(self,request,id):
        Item=get_object_or_404(item,PK=id)
        if Item:
            Item.delete()
@@ -94,7 +94,7 @@ class delete_speciefic_item(APIView):
 class delete_speciefic_invetory(APIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
-    def get(self,request,id):
+    def delete(self,request,id):
        Inventory=get_object_or_404(inventory,pk=id)
        if Inventory:
            Inventory.delete()
@@ -105,33 +105,35 @@ class delete_speciefic_invetory(APIView):
 class update_item(APIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
-    def post(self,request,id):
+    def put(self,request,id):
         Item=get_object_or_404(item,pk=id)
-        Item.name=request.data['name']
-        Item.description=request.data['description']
-        Item.quantity=request.data['quantity']
-        Item.category=request.data['category']
-        Item.price=request.data['price']
-        Item.save()
-        return Response({"message":"item updated"},status=status.HTTP_200_OK)
+        # Item.name=request.data['name']
+        # Item.description=request.data['description']
+        # Item.quantity=request.data['quantity']
+        # Item.category=request.data['category']
+        # Item.price=request.data['price']
+        # Item.save()
+        serialize=itemserialization(Item,request.data)
+        return Response({"message":"item updated","Data":serialize.data},status=status.HTTP_200_OK)
         
 class update_inventory(APIView):
     permission_classes=[IsAuthenticated]
     authentication_classes=[TokenAuthentication]
-    def post(self,request,id):
+    def put(self,request,id):
         Inventory=get_object_or_404(inventory,pk=id)
-        Inventory.name=request.data['name']
-        Inventory.location=request.data['location']
-        Inventory.items_quantity=request.data['items_quantity']
-        Inventory.category=request.data['category']
-        Inventory.save()
-        return Response({"message":"item updated"},status=status.HTTP_200_OK)   
+        # Inventory.name=request.data['name']
+        # Inventory.location=request.data['location']
+        # Inventory.items_quantity=request.data['items_quantity']
+        # Inventory.category=request.data['category']
+        # Inventory.save()
+        serialize=inventoryserialization(Inventory,request.data)
+        return Response({"message":"item updated","Data":serialize.data},status=status.HTTP_200_OK)   
        
            
            
 class filter_items(generics.ListAPIView):
-    # permission_classes=[IsAuthenticated]
-    # authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
     serializer_class=itemserialization
     def get_queryset(self):
         category=self.kwargs.get('category')
@@ -140,8 +142,8 @@ class filter_items(generics.ListAPIView):
         
         
 class sort_items(generics.ListAPIView):
-    # permission_classes=[IsAuthenticated]
-    # authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+    authentication_classes=[TokenAuthentication]
     queryset=item.objects.all()
     serializer_class=itemserialization
     filter_backends=[filters.OrderingFilter]
